@@ -21,7 +21,7 @@ import type { SidebarRoot } from 'src/utils/types';
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { usePhoneSidebar } from './usePhoneSidebar';
-import { phoneTabs } from './fadlTabs';
+import { moreTab, phoneTabs } from './fadlTabs';
 
 
 // const TAB_GROUPS = ['dashboard', 'sales', 'purchases', 'reports'];
@@ -35,15 +35,17 @@ const searchTab: SidebarRoot = {
   icon: 'lucide-search',
   route: '/search',
 };
-// const tabs = [
-//   ...groups.filter((group) => TAB_GROUPS.includes(group.name)),
-//   searchTab,
-// ];
-const tabs = [...phoneTabs(groups), searchTab];
 
-const activeTab = computed(() =>
-  route.path === searchTab.route ? searchTab.name : active.value?.group.name
-);
+const tabs = [...phoneTabs(groups), searchTab, moreTab];
+
+const activeTab = computed(() => {
+  if (route.path === searchTab.route) return searchTab.name;
+  if (route.path.startsWith('/more')) return 'more';
+  const name = active.value?.group.name;
+  if (!name) return undefined;
+  // Hub sections light the More tab, the way Sales stays lit on Customer.
+  return tabs.some((tab) => tab.name === name) ? name : 'more';
+});
 
 // MobileNavItem's `route` matches by route name, so any two lists are one page
 // (frappe/frappe-ui#1245).
