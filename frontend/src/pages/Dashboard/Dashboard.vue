@@ -63,7 +63,7 @@ import Cashflow from './Cashflow.vue';
 import Expenses from './Expenses.vue';
 import InvoiceCards from './InvoiceCards.vue';
 import MobileCreateMenu from './MobileCreateMenu.vue';
-import PeriodSelector from './PeriodSelector.vue';
+import PeriodSelector from './FadlPeriodSelector.vue';
 import ProfitAndLoss from './ProfitAndLoss.vue';
 import FadlCustomCards from './FadlCustomCards.vue';
 import { fyo } from 'src/initFyo';
@@ -92,7 +92,7 @@ export default {
     return { isMobile, canRead, ModelNameEnum };
   },
   data() {
-    return { period: 'This Year' };
+    return { period: 'Today' };
   },
   activated() {
     docsPathRef.value = 'books/dashboard';
