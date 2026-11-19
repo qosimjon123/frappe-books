@@ -38,6 +38,7 @@
             :unpaid-title="t`Unpaid purchases`"
             :period="period"
           />
+          <FadlCustomCards :period="period" />
         </div>
         <!-- The charts total the ledger. -->
         <template v-if="canRead.ledger">
@@ -64,6 +65,7 @@ import InvoiceCards from './InvoiceCards.vue';
 import MobileCreateMenu from './MobileCreateMenu.vue';
 import PeriodSelector from './PeriodSelector.vue';
 import ProfitAndLoss from './ProfitAndLoss.vue';
+import FadlCustomCards from './FadlCustomCards.vue';
 import { fyo } from 'src/initFyo';
 import { docsPathRef } from 'src/utils/refs';
 import { isMobile } from 'src/utils/viewport';
@@ -79,6 +81,7 @@ export default {
     InvoiceCards,
     MobileCreateMenu,
     PeriodSelector,
+    FadlCustomCards, 
   },
   setup() {
     const canRead = {
