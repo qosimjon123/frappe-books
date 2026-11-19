@@ -21,8 +21,10 @@ import type { SidebarRoot } from 'src/utils/types';
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { usePhoneSidebar } from './usePhoneSidebar';
+import { phoneTabs } from './fadlTabs';
 
-const TAB_GROUPS = ['dashboard', 'sales', 'purchases', 'reports'];
+
+// const TAB_GROUPS = ['dashboard', 'sales', 'purchases', 'reports'];
 
 const route = useRoute();
 const router = useRouter();
@@ -33,10 +35,12 @@ const searchTab: SidebarRoot = {
   icon: 'lucide-search',
   route: '/search',
 };
-const tabs = [
-  ...groups.filter((group) => TAB_GROUPS.includes(group.name)),
-  searchTab,
-];
+// const tabs = [
+//   ...groups.filter((group) => TAB_GROUPS.includes(group.name)),
+//   searchTab,
+// ];
+const tabs = [...phoneTabs(groups), searchTab];
+
 const activeTab = computed(() =>
   route.path === searchTab.route ? searchTab.name : active.value?.group.name
 );
