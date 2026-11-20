@@ -238,7 +238,7 @@ import ClosePOSShiftModal from './ClosePOSShiftModal.vue';
 import BatchSelectionModal from './BatchSelectionModal.vue';
 import LoyaltyProgramModal from './LoyaltyProgramModal.vue';
 import ReturnSalesInvoiceModal from './ReturnSalesInvoiceModal.vue';
-import FadlPOSFilter from './FadlPOSFilter.vue';
+import FadlPOSFilter from './FadlPOSFilter.vue'; // fadl: POS group filter
 import { ModelNameEnum } from 'models/types';
 import { showDialog, showToast } from 'src/utils/interactive';
 import { isMobile } from 'src/utils/viewport';
@@ -301,7 +301,7 @@ export default defineComponent({
     PageHeader,
     MobilePOS,
     MobilePOSMenu,
-    FadlPOSFilter,
+    FadlPOSFilter, // fadl: POS group filter
     POSActionButton,
     POSHeaderActions,
     POSPriceActions,

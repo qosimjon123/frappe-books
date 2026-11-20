@@ -1,5 +1,6 @@
 import type { Field, Schema } from 'schemas/types';
 import type { FrappeDoc } from 'src/frappe/document';
+import { orderByMeta } from 'src/utils/fadlRowOrder'; // fadl: row order
 
 /** Quick edit asks for every required field so the record can be saved. */
 export function getQuickEditFieldnames(
@@ -39,12 +40,7 @@ export function getRowEditFieldnames(schema: Schema): string[] {
     }
   }
 
-  // fadl: keep the curated set (quickEditFields drops item_name and noise),
-  // but order it by the server meta (field_order), like the row view does.
-  const order = new Map(schema.fields.map((field, i) => [field.fieldname, i]));
-  return fieldnames.sort(
-    (a, b) => (order.get(a) ?? 0) - (order.get(b) ?? 0)
-  );
+  return orderByMeta(fieldnames, schema); // fadl: order by server meta
 }
 
 /** Required fields nothing else fills in. */

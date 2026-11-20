@@ -63,9 +63,9 @@ import Cashflow from './Cashflow.vue';
 import Expenses from './Expenses.vue';
 import InvoiceCards from './InvoiceCards.vue';
 import MobileCreateMenu from './MobileCreateMenu.vue';
-import PeriodSelector from './FadlPeriodSelector.vue';
+import PeriodSelector from './FadlPeriodSelector.vue'; // fadl: alias swap
 import ProfitAndLoss from './ProfitAndLoss.vue';
-import FadlCustomCards from './FadlCustomCards.vue';
+import FadlCustomCards from './FadlCustomCards.vue'; // fadl: custom cards
 import { fyo } from 'src/initFyo';
 import { docsPathRef } from 'src/utils/refs';
 import { isMobile } from 'src/utils/viewport';
@@ -81,7 +81,7 @@ export default {
     InvoiceCards,
     MobileCreateMenu,
     PeriodSelector,
-    FadlCustomCards, 
+    FadlCustomCards, // fadl: custom cards
   },
   setup() {
     const canRead = {
@@ -92,7 +92,7 @@ export default {
     return { isMobile, canRead, ModelNameEnum };
   },
   data() {
-    return { period: 'Today' };
+    return { period: 'Today' }; // fadl: default period
   },
   activated() {
     docsPathRef.value = 'books/dashboard';

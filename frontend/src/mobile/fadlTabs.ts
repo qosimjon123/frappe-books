@@ -21,3 +21,17 @@ export function phoneTabs(groups: SidebarRoot[]): SidebarRoot[] {
     .map((name) => groups.find((group) => group.name === name))
     .filter((group): group is SidebarRoot => !!group);
 }
+
+/** Search stays lit on /search; /more and hub sections light the More tab. */
+export function activeTabName(
+  path: string,
+  groupName: string | undefined,
+  tabs: SidebarRoot[],
+  searchTab: SidebarRoot
+): string | undefined {
+  if (path === searchTab.route) return searchTab.name;
+  if (path.startsWith(moreTab.route)) return moreTab.name;
+  if (!groupName) return undefined;
+  // Hub sections light More, the way Sales stays lit on Customer.
+  return tabs.some((tab) => tab.name === groupName) ? groupName : moreTab.name;
+}

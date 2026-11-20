@@ -140,7 +140,7 @@ const kind = computed(() => {
     return 'table';
   }
 
-  if (props.title === 'Default' || props.title === t`Default`) {
+  if (props.title === 'Default' || props.title === t`Default` /* fadl: ru */) {
     return 'plain';
   }
 
