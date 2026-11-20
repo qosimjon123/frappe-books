@@ -39,7 +39,12 @@ export function getRowEditFieldnames(schema: Schema): string[] {
     }
   }
 
-  return fieldnames;
+  // fadl: keep the curated set (quickEditFields drops item_name and noise),
+  // but order it by the server meta (field_order), like the row view does.
+  const order = new Map(schema.fields.map((field, i) => [field.fieldname, i]));
+  return fieldnames.sort(
+    (a, b) => (order.get(a) ?? 0) - (order.get(b) ?? 0)
+  );
 }
 
 /** Required fields nothing else fills in. */
