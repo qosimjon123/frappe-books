@@ -33,7 +33,6 @@
   </component>
 </template>
 <script lang="ts">
-import { t } from 'fyo';
 import { Button as FrappeButton } from 'frappe-ui';
 import { NumberCard as FrappeNumberCard } from 'frappe-ui/charts';
 import { fyo } from 'src/initFyo';

@@ -43,7 +43,7 @@ import {
 import { getPOSItemGroups } from 'src/utils/pos';
 import { ref } from 'vue';
 
-const props = defineProps<{ group: string }>();
+defineProps<{ group: string }>();
 const emit = defineEmits<{ set: [group: string] }>();
 
 const open = ref(false);
