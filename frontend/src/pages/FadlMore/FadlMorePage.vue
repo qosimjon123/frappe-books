@@ -61,7 +61,7 @@ const STOCK_PRESETS: Preset[] = [
     icon: 'lucide-clipboard-plus',
     filters: [
       ['purpose', '=', 'Material Receipt'],
-      ['receipt_basis', '=', 'Stock Surplus'],
+      ['receipt_basis', 'in', ['Stock Surplus', '']],
     ],
   },
   {
@@ -106,16 +106,52 @@ const JOURNAL_PRESETS: Preset[] = [
   },
 ];
 
+/** Payment Entry's three operations; transfers get their own list at last. */
+const PAYMENT_SALES: Preset = {
+  name: 'payment-sales',
+  label: t`Sales Payment`,
+  icon: 'lucide-wallet',
+  filters: [
+    ['payment_type', '=', 'Receive'],
+    ['party_type', '=', 'Books Customer'],
+  ],
+};
+const PAYMENT_PURCHASE: Preset = {
+  name: 'payment-purchase',
+  label: t`Purchase Payment`,
+  icon: 'lucide-wallet',
+  filters: [
+    ['payment_type', '=', 'Pay'],
+    ['party_type', '=', 'Books Supplier'],
+  ],
+};
+const PAYMENT_TRANSFER: Preset = {
+  name: 'payment-transfer',
+  label: t`Internal Transfer`,
+  icon: 'lucide-arrow-right-left',
+  filters: [['payment_type', '=', 'Internal Transfer']],
+};
+
+const SALES_PAYMENT_ROUTE = `/list/PaymentEntry/${t`Sales Payment`}`;
+const PURCHASE_PAYMENT_ROUTE = `/list/PaymentEntry/${t`Purchase Payment`}`;
+
 /** A plain tile and the named operations that replace it, keyed by its route. */
 const REPLACEMENTS: Record<string, { schema: string; presets: Preset[] }> = {
   '/list/StockEntry': { schema: 'StockEntry', presets: STOCK_PRESETS },
   '/list/JournalEntry': { schema: 'JournalEntry', presets: JOURNAL_PRESETS },
+  [SALES_PAYMENT_ROUTE]: { schema: 'PaymentEntry', presets: [PAYMENT_SALES] },
+  [PURCHASE_PAYMENT_ROUTE]: {
+    schema: 'PaymentEntry',
+    presets: [PAYMENT_PURCHASE],
+  },
 };
 
 /**
  * Children of a tile that survived boot rights and feature flags: each preset
  * inherits the parent item whole, so its access is exactly the parent's.
  * The translated label titles the list, as the Payment lists do.
+ * Filters only prefill the create form; every field stays visible on phone
+ * and on desktop, so the two never diverge.
  */
 function expand(item: SidebarItem, schema: string, presets: Preset[]): SidebarItem[] {
   return presets.map((preset) => ({
@@ -123,23 +159,38 @@ function expand(item: SidebarItem, schema: string, presets: Preset[]): SidebarIt
     name: preset.name,
     label: preset.label,
     icon: preset.icon,
-    route: `/list/${schema}/${preset.label}`,
+    // Encode the title: a translation may contain "/" or spaces, which would
+    // otherwise split the path into extra segments and break the list route.
+    route: `/list/${schema}/${encodeURIComponent(preset.label)}`,
     filters: preset.filters,
   }));
 }
 
-function replaceItems(items: SidebarItem[]): SidebarItem[] {
-  return items.flatMap((item) => {
+/** The sales-payment tile, reused as the parent of the transfer tile. */
+let paymentParent: SidebarItem | undefined;
+
+function replaceItems(items: SidebarItem[], groupName: string): SidebarItem[] {
+  const out = items.flatMap((item) => {
+    if (item.route === SALES_PAYMENT_ROUTE) {
+      paymentParent = item;
+    }
     const replacement = REPLACEMENTS[item.route];
     return replacement
       ? expand(item, replacement.schema, replacement.presets)
       : [item];
   });
+  // Transfers belong to neither sales nor purchases: show them under Common.
+  if (groupName === 'common-entries' && paymentParent) {
+    out.push(...expand(paymentParent, 'PaymentEntry', [PAYMENT_TRANSFER]));
+  }
+  return out;
 }
 
 const hub = groups
   .filter((group) => group.name !== 'dashboard')
   .map((group) =>
-    group.items ? { ...group, items: replaceItems(group.items) } : group
+    group.items
+      ? { ...group, items: replaceItems(group.items, group.name) }
+      : group
   );
 </script>
