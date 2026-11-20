@@ -19,6 +19,7 @@
           :applied-coupons-count="appliedCouponsCount"
           @select="openMenuAction"
         />
+        <FadlPOSFilter :group="selectedItemGroup" @set="setItemGroup" />
       </template>
       <template v-if="shiftSubtitle" #left>
         <!-- A tablet's header keeps its room for the title and actions. -->
@@ -237,6 +238,7 @@ import ClosePOSShiftModal from './ClosePOSShiftModal.vue';
 import BatchSelectionModal from './BatchSelectionModal.vue';
 import LoyaltyProgramModal from './LoyaltyProgramModal.vue';
 import ReturnSalesInvoiceModal from './ReturnSalesInvoiceModal.vue';
+import FadlPOSFilter from './FadlPOSFilter.vue';
 import { ModelNameEnum } from 'models/types';
 import { showDialog, showToast } from 'src/utils/interactive';
 import { isMobile } from 'src/utils/viewport';
@@ -299,6 +301,7 @@ export default defineComponent({
     PageHeader,
     MobilePOS,
     MobilePOSMenu,
+    FadlPOSFilter,
     POSActionButton,
     POSHeaderActions,
     POSPriceActions,
