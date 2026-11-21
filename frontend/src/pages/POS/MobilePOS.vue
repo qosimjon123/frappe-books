@@ -135,7 +135,7 @@ import { POSItem } from 'src/components/POS/types';
 import { fyo } from 'src/initFyo';
 import EmptyState from 'src/components/EmptyState.vue';
 import MobileFooter from 'src/mobile/MobileFooter.vue';
-import BarcodeScanButton from 'src/mobile/scan/BarcodeScanButton.vue';
+import BarcodeScanButton from 'src/mobile/scan/FadlScanButton.vue'; // fadl: fixed top scanner
 import { getItemInitials, getPayableTotal } from 'src/utils/pos';
 import { getQuantityByItem } from 'src/utils/posCart';
 import {
