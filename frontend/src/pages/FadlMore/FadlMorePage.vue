@@ -12,7 +12,12 @@
             class="flex aspect-square flex-col items-center justify-center gap-2 rounded-5 border border-outline-gray-2 bg-surface-base p-2 text-center active:bg-surface-gray-2"
             @click="router.push(getSidebarLocation(item))"
           >
-            <FrappeIcon :icon="item.icon" class="size-6 shrink-0 text-ink-gray-6" />
+            <span
+              class="flex size-9 shrink-0 items-center justify-center rounded-6"
+              :class="groupChip(group.name)"
+            >
+              <FrappeIcon :icon="item.icon" class="size-5" />
+            </span>
             <span class="line-clamp-2 text-sm text-ink-gray-9">{{ item.label }}</span>
           </button>
         </div>
@@ -22,9 +27,10 @@
 </template>
 
 <script setup lang="ts">
-import { Icon as FrappeIcon } from 'frappe-ui';
+import { Icon as FrappeIcon, shellScrollContainer } from 'frappe-ui';
 import { t } from 'fyo';
-import { useRouter } from 'vue-router';
+import { onActivated } from 'vue';
+import { onBeforeRouteLeave, useRouter } from 'vue-router';
 import PageHeader from 'src/components/PageHeader.vue';
 import type { Filter } from 'src/frappe/api';
 import { usePhoneSidebar } from 'src/mobile/usePhoneSidebar';
@@ -186,11 +192,51 @@ function replaceItems(items: SidebarItem[], groupName: string): SidebarItem[] {
   return out;
 }
 
-const hub = groups
+const mapped = groups
   .filter((group) => group.name !== 'dashboard')
   .map((group) =>
     group.items
       ? { ...group, items: replaceItems(group.items, group.name) }
       : group
   );
+
+// Common first: its tiles (items, journals, transfers) are the daily ones.
+// Reorder after the map so replaceItems still runs in sidebar order.
+const commonIndex = mapped.findIndex((group) => group.name === 'common-entries');
+const hub =
+  commonIndex > 0
+    ? [mapped[commonIndex], ...mapped.slice(0, commonIndex), ...mapped.slice(commonIndex + 1)]
+    : mapped;
+
+/**
+ * iOS-style category chips: one hue per group on a neutral tile. Red and
+ * green stay reserved for their semantic use elsewhere in the app; Setup
+ * and any rare regional group keep the neutral chip. Token pairs adapt to
+ * dark mode on their own.
+ */
+const GROUP_CHIPS: Record<string, string> = {
+  'common-entries': 'bg-surface-blue-2 text-ink-blue-7',
+  sales: 'bg-surface-violet-2 text-ink-violet-7',
+  purchases: 'bg-surface-amber-2 text-ink-amber-7',
+  inventory: 'bg-surface-teal-2 text-ink-teal-7',
+  reports: 'bg-surface-orange-2 text-ink-orange-7',
+  pos: 'bg-surface-pink-2 text-ink-pink-7',
+};
+const NEUTRAL_CHIP = 'bg-surface-gray-2 text-ink-gray-6';
+
+function groupChip(groupName: string): string {
+  return GROUP_CHIPS[groupName] ?? NEUTRAL_CHIP;
+}
+
+// The shell's scroll container is shared by every page, so leaving More
+// loses its position. The page is kept alive (MobileDesk's <keep-alive>):
+// save the position before the DOM swaps, restore it on return.
+let savedScrollTop = 0;
+onBeforeRouteLeave(() => {
+  savedScrollTop = shellScrollContainer.value?.scrollTop ?? 0;
+});
+onActivated(() => {
+  const el = shellScrollContainer.value;
+  if (el) el.scrollTop = savedScrollTop;
+});
 </script>
