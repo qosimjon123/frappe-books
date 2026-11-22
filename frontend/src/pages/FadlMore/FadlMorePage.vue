@@ -2,7 +2,11 @@
   <div class="flex min-h-full flex-col bg-surface-base">
     <PageHeader :title="t`More`" />
     <div class="flex flex-col gap-5 p-4">
-      <section v-for="group in hub" :key="group.name" class="flex flex-col gap-2">
+      <section
+        v-for="group in hub"
+        :key="group.name"
+        class="flex flex-col gap-2"
+      >
         <h2 class="px-1 text-sm text-ink-gray-5">{{ group.label }}</h2>
         <div class="grid grid-cols-3 gap-2">
           <button
@@ -18,7 +22,9 @@
             >
               <FrappeIcon :icon="item.icon" class="size-5" />
             </span>
-            <span class="line-clamp-2 text-sm text-ink-gray-9">{{ item.label }}</span>
+            <span class="line-clamp-2 text-sm text-ink-gray-9">{{
+              item.label
+            }}</span>
           </button>
         </div>
       </section>
@@ -53,22 +59,10 @@ interface Preset {
 /** Stock Entry's purposes, named as the shop floor knows them. */
 const STOCK_PRESETS: Preset[] = [
   {
-    name: 'opening-stock',
-    label: t`Opening Stock`,
+    name: 'stock-receipt',
+    label: t`Stock Receipt`,
     icon: 'lucide-package-plus',
-    filters: [
-      ['purpose', '=', 'Material Receipt'],
-      ['receipt_basis', '=', 'Opening Stock'],
-    ],
-  },
-  {
-    name: 'stock-surplus',
-    label: t`Stock Surplus`,
-    icon: 'lucide-clipboard-plus',
-    filters: [
-      ['purpose', '=', 'Material Receipt'],
-      ['receipt_basis', 'in', ['Stock Surplus', '']],
-    ],
+    filters: [['purpose', '=', 'Material Receipt']],
   },
   {
     name: 'stock-shortage',
@@ -159,7 +153,11 @@ const REPLACEMENTS: Record<string, { schema: string; presets: Preset[] }> = {
  * Filters only prefill the create form; every field stays visible on phone
  * and on desktop, so the two never diverge.
  */
-function expand(item: SidebarItem, schema: string, presets: Preset[]): SidebarItem[] {
+function expand(
+  item: SidebarItem,
+  schema: string,
+  presets: Preset[]
+): SidebarItem[] {
   return presets.map((preset) => ({
     ...item,
     name: preset.name,
@@ -202,10 +200,16 @@ const mapped = groups
 
 // Common first: its tiles (items, journals, transfers) are the daily ones.
 // Reorder after the map so replaceItems still runs in sidebar order.
-const commonIndex = mapped.findIndex((group) => group.name === 'common-entries');
+const commonIndex = mapped.findIndex(
+  (group) => group.name === 'common-entries'
+);
 const hub =
   commonIndex > 0
-    ? [mapped[commonIndex], ...mapped.slice(0, commonIndex), ...mapped.slice(commonIndex + 1)]
+    ? [
+        mapped[commonIndex],
+        ...mapped.slice(0, commonIndex),
+        ...mapped.slice(commonIndex + 1),
+      ]
     : mapped;
 
 /**
