@@ -87,12 +87,6 @@ const STOCK_PRESETS: Preset[] = [
 /** Journal Entry's voucher types; the form still lets the user switch the type. */
 const JOURNAL_PRESETS: Preset[] = [
   {
-    name: 'journal-loans',
-    label: t`Loans and Other`,
-    icon: 'lucide-hand-coins',
-    filters: [['voucher_type', '=', 'Journal Entry']],
-  },
-  {
     name: 'journal-cash',
     label: t`Cash Entry`,
     icon: 'lucide-banknote',

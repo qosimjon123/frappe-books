@@ -404,6 +404,13 @@ function getCompleteSidebar(): SidebarConfig {
           schemaName: 'JournalEntry',
         },
         {
+          label: t`Loans`, // fadl: loans list
+          name: 'loans',
+          icon: 'lucide-hand-coins',
+          route: '/list/FadlLoan',
+          schemaName: 'FadlLoan',
+        },
+        {
           label: t`Item`,
           name: 'item',
           icon: 'lucide-package',

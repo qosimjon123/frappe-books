@@ -12,6 +12,8 @@ import { Defaults } from './baseModels/Defaults/Defaults';
 import { GetStarted } from './baseModels/GetStarted/GetStarted';
 import { Item } from './baseModels/Item/Item';
 import { JournalEntry } from './baseModels/JournalEntry/JournalEntry';
+import { FadlLoan } from './baseModels/FadlLoan/FadlLoan'; // fadl: loans
+import { FadlLoanRepayment } from './baseModels/FadlLoan/FadlLoanRepayment'; // fadl: loans
 import { Misc } from './baseModels/Misc';
 import { NumberSeries } from './baseModels/NumberSeries/NumberSeries';
 import { LoyaltyProgram } from './baseModels/LoyaltyProgram/LoyaltyProgram';
@@ -78,6 +80,8 @@ export const frappeModels: Record<string, FrappeModel> = {
   PaymentEntry,
   ModeOfPayment,
   JournalEntry,
+  FadlLoan, // fadl: loans
+  FadlLoanRepayment, // fadl: loans
   ItemEnquiry,
   CouponCode,
   PriceList,
