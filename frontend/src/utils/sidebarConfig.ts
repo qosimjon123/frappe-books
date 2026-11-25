@@ -4,6 +4,7 @@ import { canOpenReport } from 'reports/serverReport';
 import { getImportableSchemaNames } from 'src/importer';
 import { routeFilters } from 'src/utils/filters';
 import { fyo } from '../initFyo';
+import { getFadlCommonItems } from './fadlSidebarItems'; // fadl: loans list
 import { SidebarConfig, SidebarItem, SidebarRoot } from './types';
 
 export function getSidebarConfig(): SidebarConfig {
@@ -403,13 +404,7 @@ function getCompleteSidebar(): SidebarConfig {
           route: '/list/JournalEntry',
           schemaName: 'JournalEntry',
         },
-        {
-          label: t`Loans`, // fadl: loans list
-          name: 'loans',
-          icon: 'lucide-hand-coins',
-          route: '/list/FadlLoan',
-          schemaName: 'FadlLoan',
-        },
+        ...getFadlCommonItems(), // fadl: loans list
         {
           label: t`Item`,
           name: 'item',
